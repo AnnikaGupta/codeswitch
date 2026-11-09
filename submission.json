@@ -1,5 +1,5 @@
 {
-  "deploy_url": "PENDING_CLOUD_RUN_DEPLOY",
+  "deploy_url": "https://codeswitch-387773877374.europe-west1.run.app",
   "authors": ["ag5170"],
   "path": "research"
 }

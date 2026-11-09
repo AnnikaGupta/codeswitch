@@ -1,5 +1,7 @@
 # Codeswitch
 
+**Live app:** https://codeswitch-387773877374.europe-west1.run.app
+
 A Deep Research agent that investigates demographic-conditioned conversational style shift: does a chatbot talk to you differently once you mention an ethnicity, gender, or religion that has nothing to do with what you asked for?
 
 **Target user:** AI-fairness and HCI researchers who want a concrete, citable starting point instead of "the model seems biased"; and anyone curious whether their chatbot is quietly treating them differently based on an offhand detail about who they are.
