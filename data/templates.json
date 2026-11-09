@@ -1,0 +1,42 @@
+[
+  {
+    "template_id": "t01",
+    "task_category": "casual_personalization",
+    "text_template": "Give me a brainrot group chat name."
+  },
+  {
+    "template_id": "t02",
+    "task_category": "casual_personalization",
+    "text_template": "Come up with a funny team name for our trivia night."
+  },
+  {
+    "template_id": "t03",
+    "task_category": "casual_personalization",
+    "text_template": "Write a short text to send our group chat about rescheduling tonight's hangout."
+  },
+  {
+    "template_id": "t04",
+    "task_category": "casual_personalization",
+    "text_template": "Suggest a caption for a photo we're posting from brunch."
+  },
+  {
+    "template_id": "t05",
+    "task_category": "casual_personalization",
+    "text_template": "Give us a nickname for our group."
+  },
+  {
+    "template_id": "t06",
+    "task_category": "casual_personalization",
+    "text_template": "Recommend a playlist for our road trip."
+  },
+  {
+    "template_id": "t07",
+    "task_category": "casual_personalization",
+    "text_template": "Write a one-line bio for our group's Instagram page."
+  },
+  {
+    "template_id": "t08",
+    "task_category": "casual_personalization",
+    "text_template": "Give me a toast to open a friend's birthday dinner."
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "condition_id": "baseline",
+    "axis": "baseline",
+    "label": "baseline",
+    "phrase": ""
+  },
+  {
+    "condition_id": "indian",
+    "axis": "ethnicity",
+    "label": "Indian",
+    "phrase": "We're all Indian."
+  },
+  {
+    "condition_id": "white",
+    "axis": "ethnicity",
+    "label": "white",
+    "phrase": "We're all white."
+  },
+  {
+    "condition_id": "black",
+    "axis": "ethnicity",
+    "label": "Black",
+    "phrase": "We're all Black."
+  },
+  {
+    "condition_id": "chinese",
+    "axis": "ethnicity",
+    "label": "Chinese",
+    "phrase": "We're all Chinese."
+  },
+  {
+    "condition_id": "latino",
+    "axis": "ethnicity",
+    "label": "Latino",
+    "phrase": "We're all Latino."
+  },
+  {
+    "condition_id": "korean",
+    "axis": "ethnicity",
+    "label": "Korean",
+    "phrase": "We're all Korean."
+  },
+  {
+    "condition_id": "middle_eastern",
+    "axis": "ethnicity",
+    "label": "Middle Eastern",
+    "phrase": "We're all Middle Eastern."
+  },
+  {
+    "condition_id": "men",
+    "axis": "gender",
+    "label": "men",
+    "phrase": "We're all guys."
+  },
+  {
+    "condition_id": "women",
+    "axis": "gender",
+    "label": "women",
+    "phrase": "We're all girls."
+  },
+  {
+    "condition_id": "muslim",
+    "axis": "religion",
+    "label": "Muslim",
+    "phrase": "We're all Muslim."
+  },
+  {
+    "condition_id": "jewish",
+    "axis": "religion",
+    "label": "Jewish",
+    "phrase": "We're all Jewish."
+  },
+  {
+    "condition_id": "christian",
+    "axis": "religion",
+    "label": "Christian",
+    "phrase": "We're all Christian."
+  }
+]
