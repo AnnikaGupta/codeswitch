@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "codeswitch-agent"
 version = "0.1.0"
@@ -32,6 +28,5 @@ markers = [
 ]
 addopts = "-m 'not integration'"
 
-[tool.setuptools]
-py-modules = ["app"]
-packages = ["agent"]
+[tool.uv]
+package = false  # no self-install needed -- `uv run app.py` resolves `agent/` as a plain sibling import
