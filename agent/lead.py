@@ -106,6 +106,7 @@ def run_lead(user_message: str) -> dict:
                 finding, sub_tool_calls = future.result()
                 tool_calls_log.append({
                     "agent": "lead", "name": "dispatch_researcher", "args": args, "result": finding,
+                    "label": label,
                 })
                 tool_calls_log.extend(sub_tool_calls)
                 all_findings.append(f"[{label}] Q: {args.get('question')}\nFinding: {finding}")

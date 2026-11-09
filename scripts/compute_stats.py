@@ -3,6 +3,15 @@ baseline, with a Bonferroni-corrected significance flag, and writes them into
 stats_summary. Deterministic, not LLM-driven -- the whole point is that the
 agent shouldn't be the one deciding what counts as a "real" finding.
 
+The same 8 task templates repeat across every condition, so responses aren't
+independent samples: some templates just run narrower/more formal than others
+regardless of condition (baseline narrowness alone ranges ~1.0-3.0 across
+templates). Treating all 16 responses per cell as iid understates uncertainty.
+Instead this pairs by template: for each template, take (condition mean -
+that template's own baseline mean), then test whether the mean of those
+per-template paired differences is nonzero, with a t-distribution on
+n_templates - 1 degrees of freedom (n_templates <= 8, not 16).
+
 Usage: uv run scripts/compute_stats.py
 """
 
@@ -10,7 +19,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from scipy.stats import norm
+from scipy.stats import t as t_dist
 
 sys.path.insert(0, str(Path(__file__).parent))
 from db_schema import connect, DB_PATH_DEFAULT  # noqa: E402
@@ -29,7 +38,7 @@ N_COMPARISONS = 12  # non-baseline conditions; Bonferroni correction divides alp
 def main(db_path: str = DB_PATH_DEFAULT):
     con = connect(db_path)
     df = con.execute("""
-        SELECT r.model, c.axis, c.condition_id, s.*
+        SELECT r.model, r.template_id, c.axis, c.condition_id, s.*
         FROM scores s
         JOIN responses r USING (response_id)
         JOIN conditions c USING (condition_id)
@@ -39,37 +48,52 @@ def main(db_path: str = DB_PATH_DEFAULT):
         print("No scored responses yet -- run generate_benchmark.py and score_benchmark.py first.")
         return
 
-    z_crit = norm.ppf(1 - 0.05 / (2 * N_COMPARISONS))
+    alpha = 0.05 / N_COMPARISONS
     rows = []
 
     for model, model_df in df.groupby("model"):
         baseline_df = model_df[model_df["condition_id"] == "baseline"]
         for metric in METRICS:
-            vals = pd.to_numeric(baseline_df[metric], errors="coerce").dropna()
-            if len(vals) == 0:
+            baseline_vals = pd.to_numeric(baseline_df[metric], errors="coerce")
+            baseline_by_template = baseline_vals.groupby(baseline_df["template_id"]).mean()
+            overall_baseline_mean = baseline_vals.dropna().mean()
+            if pd.isna(overall_baseline_mean):
                 continue
-            baseline_mean = vals.mean()
-            baseline_se = vals.std(ddof=1) / max(len(vals) ** 0.5, 1) if len(vals) > 1 else 0.0
 
             for condition_id, cond_df in model_df.groupby("condition_id"):
                 if condition_id == "baseline":
                     continue
                 axis = cond_df["axis"].iloc[0]
-                vals_c = pd.to_numeric(cond_df[metric], errors="coerce").dropna()
-                n = len(vals_c)
-                if n == 0:
+                cond_vals = pd.to_numeric(cond_df[metric], errors="coerce")
+                n_responses = cond_vals.notna().sum()
+                if n_responses == 0:
                     continue
-                mean_c = vals_c.mean()
-                se_c = vals_c.std(ddof=1) / max(n ** 0.5, 1) if n > 1 else 0.0
+                mean_c = cond_vals.mean()
 
-                diff = mean_c - baseline_mean
-                se_diff = (se_c ** 2 + baseline_se ** 2) ** 0.5
-                ci_low = diff - z_crit * se_diff
-                ci_high = diff + z_crit * se_diff
-                sig = (ci_low > 0) or (ci_high < 0)
+                cond_by_template = cond_vals.groupby(cond_df["template_id"]).mean()
+                common = cond_by_template.index.intersection(baseline_by_template.index)
+                diffs = (cond_by_template[common] - baseline_by_template[common]).dropna()
+                n_templates = len(diffs)
 
-                rows.append((axis, condition_id, model, metric, n, mean_c, baseline_mean,
-                             diff, ci_low, ci_high, bool(sig)))
+                if n_templates < 2:
+                    # Can't estimate across-template variance; report descriptively, never "significant".
+                    rows.append((axis, condition_id, model, metric, int(n_responses), mean_c,
+                                 overall_baseline_mean, mean_c - overall_baseline_mean, None, None, False))
+                    continue
+
+                diff_mean = diffs.mean()
+                diff_se = diffs.std(ddof=1) / (n_templates ** 0.5)
+                if diff_se == 0:
+                    ci_low = ci_high = diff_mean
+                    sig = diff_mean != 0
+                else:
+                    t_crit = t_dist.ppf(1 - alpha / 2, df=n_templates - 1)
+                    ci_low = diff_mean - t_crit * diff_se
+                    ci_high = diff_mean + t_crit * diff_se
+                    sig = (ci_low > 0) or (ci_high < 0)
+
+                rows.append((axis, condition_id, model, metric, int(n_responses), mean_c,
+                             overall_baseline_mean, diff_mean, ci_low, ci_high, bool(sig)))
 
     con.execute("DELETE FROM stats_summary")
     con.executemany(
@@ -78,7 +102,8 @@ def main(db_path: str = DB_PATH_DEFAULT):
     )
     con.close()
     sig_count = sum(1 for r in rows if r[-1])
-    print(f"Wrote {len(rows)} stats_summary rows ({sig_count} Bonferroni-significant) to {db_path}")
+    print(f"Wrote {len(rows)} stats_summary rows ({sig_count} Bonferroni-significant, "
+          f"template-paired t-test, df<=7) to {db_path}")
 
 
 if __name__ == "__main__":

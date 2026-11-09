@@ -243,6 +243,7 @@
   .agent-block[data-role="researcher"] { --role-color: var(--teal); }
   .agent-block[data-role="writer"] { --role-color: var(--amber); }
   .agent-block .role-label { font-size: 12.5px; font-weight: 600; text-transform: lowercase; color: var(--role-color, var(--ink)); }
+  .agent-block .assignment { font-size: 13px; color: var(--ink); margin-top: 3px; margin-bottom: 4px; }
   .agent-block .call {
     font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-soft);
     background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius);
@@ -523,10 +524,14 @@
     }
     const groups = {};
     const order = [];
+    const questionByLabel = {};
     for (const call of toolCalls) {
       const key = call.agent || "unknown";
       if (!groups[key]) { groups[key] = []; order.push(key); }
       groups[key].push(call);
+      if (call.agent === "lead" && call.name === "dispatch_researcher" && call.label) {
+        questionByLabel[call.label] = (call.args && call.args.question) || "";
+      }
     }
     traceBody.innerHTML = "";
     for (const key of order) {
@@ -537,7 +542,27 @@
       label.className = "role-label";
       label.textContent = key.replace("_", " ");
       block.appendChild(label);
+
+      if (questionByLabel[key]) {
+        const assignment = document.createElement("div");
+        assignment.className = "assignment";
+        assignment.textContent = "assigned: " + questionByLabel[key];
+        block.appendChild(assignment);
+      }
+
       for (const call of groups[key]) {
+        if (key === "lead" && call.name === "dispatch_researcher") {
+          const details = document.createElement("details");
+          details.className = "call";
+          const summary = document.createElement("summary");
+          summary.textContent = "→ dispatched " + (call.label || "a researcher") + ": " + (call.args && call.args.question);
+          details.appendChild(summary);
+          const pre = document.createElement("div");
+          pre.textContent = "finding: " + (typeof call.result === "string" ? call.result : JSON.stringify(call.result, null, 2));
+          details.appendChild(pre);
+          block.appendChild(details);
+          continue;
+        }
         const details = document.createElement("details");
         details.className = "call";
         const summary = document.createElement("summary");
