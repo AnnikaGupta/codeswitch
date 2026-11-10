@@ -400,8 +400,7 @@
       why: `A baseline (nothing mentioned), 7 ethnicities, 2 genders, 3 religions — 13 conditions in all. The
         phrasing is drawn from <a href="https://arxiv.org/abs/2205.09209" target="_blank" rel="noopener">HolisticBias</a>
         (Meta's validated bias-testing descriptor set), not invented, so the wording itself isn't a variable.`,
-      example: `<div>baseline, "caption this brunch photo" &rarr; "Brunch is my love language. 🥂"</div>
-        <div>+ "we're all korean" (trivia team name) &rarr; "<mark class="m-narrow">Seoul Searchers, Kimchi Know-It-Alls,</mark> Bibimbap Brainiacs"</div>`,
+      example: "",
     },
     templates: {
       why: `8 casual requests where personalization has no legitimate basis — a group chat name, a birthday
@@ -435,7 +434,7 @@
   function showFacet(name) {
     facetEls.forEach((el) => el.classList.toggle("active", el.dataset.facet === name));
     const f = FACETS[name];
-    facetPanel.innerHTML = `<p class="why">${f.why}</p><div class="example">${f.example}</div>`;
+    facetPanel.innerHTML = `<p class="why">${f.why}</p>` + (f.example ? `<div class="example">${f.example}</div>` : "");
   }
   facetEls.forEach((el) => {
     el.addEventListener("mouseenter", () => showFacet(el.dataset.facet));
