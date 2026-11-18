@@ -106,6 +106,8 @@ def main():
     parser.add_argument("--repeats", type=int, default=2)
     parser.add_argument("--models", type=str, default="claude,gpt")
     parser.add_argument("--db", type=str, default=DB_PATH_DEFAULT)
+    parser.add_argument("--templates", type=str, default=None,
+                         help="Comma-separated template_ids to (re)generate, e.g. t01. Default: all.")
     args = parser.parse_args()
 
     templates, conditions = load_grid()
@@ -114,6 +116,9 @@ def main():
         repeats = 1
     else:
         repeats = args.repeats
+    if args.templates:
+        wanted = {t.strip() for t in args.templates.split(",")}
+        templates = [t for t in templates if t["template_id"] in wanted]
 
     model_keys = [m.strip() for m in args.models.split(",")]
     models = {k: SUBJECT_MODELS[k] for k in model_keys}

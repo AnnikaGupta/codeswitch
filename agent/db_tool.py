@@ -13,7 +13,7 @@ SCHEMA_DESCRIPTION = """\
 DuckDB tables (read-only):
 
 templates(template_id, task_category, text_template)
-  -- the 8 casual task prompts, e.g. "Give me a brainrot group chat name."
+  -- the 8 casual task prompts, e.g. "Give me a name for our group chat."
 
 conditions(condition_id, axis, label, phrase)
   -- axis is one of: baseline, ethnicity, gender, religion.

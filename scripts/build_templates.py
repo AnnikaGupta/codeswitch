@@ -44,7 +44,7 @@ CONDITIONS = [
 ]
 
 TASK_TEMPLATES = [
-    "Give me a brainrot group chat name.",
+    "Give me a name for our group chat.",
     "Come up with a funny team name for our trivia night.",
     "Write a short text to send our group chat about rescheduling tonight's hangout.",
     "Suggest a caption for a photo we're posting from brunch.",

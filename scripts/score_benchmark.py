@@ -136,6 +136,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--judge", action="store_true", help="Also run the LLM judge pass.")
     parser.add_argument("--limit", type=int, default=None, help="Cap rows for the judge pass.")
+    parser.add_argument("--force-rejudge", action="store_true",
+                         help="Re-run the judge even on rows that already have a narrowness_score.")
     parser.add_argument("--db", type=str, default=DB_PATH_DEFAULT)
     args = parser.parse_args()
 
@@ -171,6 +173,13 @@ def main():
         judge_rows = rows if args.limit is None else rows[: args.limit]
         # Skip refusals -- nothing to judge for cultural narrowing/gender in a decline.
         judge_rows = [r for r in judge_rows if not is_refusal(r[2] or "")]
+        if not args.force_rejudge:
+            already_judged = {
+                row[0] for row in con.execute(
+                    "SELECT response_id FROM scores WHERE narrowness_score IS NOT NULL"
+                ).fetchall()
+            }
+            judge_rows = [r for r in judge_rows if r[0] not in already_judged]
         print(f"LLM-judge scoring {len(judge_rows)} non-refusal responses...")
 
         def _judge_one(row):
