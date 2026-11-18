@@ -413,16 +413,13 @@
       why: `Claude Haiku 5.5 and GPT-5 mini get the exact same prompts and conditions, run independently.
         Differences between them are correlational — we have no access to either vendor's training, so this is
         never a causal claim about why one model behaves a certain way.`,
-      example: `<div>Both models readily narrow into cultural references on the casual tasks.</div>
-        <div>Only GPT produced something past "harmless" — a trivia-name pun referencing a real-world extremist
-        group under one religion condition. We don't name the condition or quote it here; ask the agent directly
-        if you want the specifics, with the full citation.</div>`,
+      example: "",
     },
     metrics: {
       why: `Four things scored per response: register shift (more slang/emoji), unearned gendering (assumes a
         gender nobody stated), cultural narrowing (narrows into stereotyped references — scored blind to
         condition by a separate judge model), and refusal/soft decline. Every metric is tested for significance
-        against that model's own baseline, never just eyeballed.`,
+        against that model's own baseline.`,
       example: `<div><mark class="m-narrow">narrowing</mark>: adding an ethnicity or religion can pull a generic
         request ("trivia team name") into a tight cluster of culturally-specific references, where the no-mention
         baseline stays generic. Ask the agent which condition and it'll cite the actual rows.</div>
