@@ -8,7 +8,7 @@ A Deep Research agent that investigates demographic-conditioned conversational s
 
 ## Data
 
-Every row in `data/benchmark.duckdb` is a real response from Claude or GPT, generated specifically for this project — not scraped, and not something either model already "knows" (it's their own freshly-generated output). The demographic phrasing itself (the exact wording for each ethnicity/gender/religion) comes from Meta's HolisticBias dataset, not invented by us.
+Every row in `data/benchmark.duckdb` is a real response from Claude or GPT, generated specifically for this project — not scraped, and not something either model already "knows" (it's their own freshly-generated output). The demographic phrasing itself (the exact wording for each ethnicity/gender/religion) comes from Meta's HolisticBias dataset, not invented by me.
 
 **Design:** 15 casual task templates (e.g. "Give me a name for our group chat.") × 29 demographic conditions (1 baseline + 10 ethnicities + 8 genders + 10 religions) × 2 subject models (`anthropic/claude-haiku-5-5`, `openai/gpt-5-mini`) × 2 repeats = 1,740 generations, scored on register shift, unsupported gender inference, cultural narrowing, and refusal, then tested for significance against each model's own baseline.
 

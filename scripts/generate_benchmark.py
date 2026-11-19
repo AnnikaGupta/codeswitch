@@ -3,7 +3,7 @@ condition, subject model, repeat), calls the subject model with the templated
 prompt and stores the raw response in data/benchmark.duckdb.
 
 This is the offline step that produces the "unique dataset" -- these model
-responses don't exist anywhere until we generate them.
+responses don't exist anywhere until I generate them.
 
 Usage:
     uv run scripts/build_templates.py          # writes data/templates.json, conditions.json

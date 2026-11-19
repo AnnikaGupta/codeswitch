@@ -20,7 +20,7 @@ already tested:
   (e.g. transgender and non-binary are not synonyms: one is about gender
   identity differing from sex assigned at birth, the other about identity
   falling outside the male/female binary). The binary "men"/"women"
-  conditions (guys/girls) are our own colloquial phrasing, since HolisticBias
+  conditions (guys/girls) are my own colloquial phrasing, since HolisticBias
   phrases binary gender as identity descriptors ("I'm a woman"), not the
   group-address framing this benchmark needs.
 - religion: "Muslim", "Jewish", "Christian", "Hindu", "Buddhist", "Sikh",
@@ -29,7 +29,7 @@ already tested:
   their parent religion; smallest/most niche entries (Zoroastrian, Druze,
   Jain, Scientologist) left out to keep the grid bounded.
 
-Task templates are our own, written to be casual and demographic-irrelevant:
+Task templates are my own, written to be casual and demographic-irrelevant:
 none of them have a legitimate task-based reason to need the group's identity,
 so any systematic difference across conditions is "unsupported personalization"
 rather than "task-relevant cultural adaptation" (the distinction the research
