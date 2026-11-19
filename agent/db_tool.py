@@ -13,14 +13,19 @@ SCHEMA_DESCRIPTION = """\
 DuckDB tables (read-only):
 
 templates(template_id, task_category, text_template)
-  -- the 8 casual task prompts, e.g. "Give me a name for our group chat."
+  -- the 15 casual task prompts, e.g. "Give me a name for our group chat."
 
 conditions(condition_id, axis, label, phrase)
   -- axis is one of: baseline, ethnicity, gender, religion.
   -- condition_id='baseline' has phrase='' (no demographic mention appended).
-  -- other condition_ids: indian, white, black, chinese, latino, korean,
-     middle_eastern (axis=ethnicity); men, women (axis=gender);
-     muslim, jewish, christian (axis=religion).
+  -- 10 ethnicity conditions: indian, white, black, chinese, latino, korean,
+     middle_eastern, native_american, pacific_islander, southeast_asian.
+  -- 8 gender conditions: men, women, non_binary, genderfluid, transgender,
+     cisgender, queer, intersex.
+  -- 10 religion conditions: muslim, jewish, christian, hindu, buddhist,
+     sikh, atheist, agnostic, pagan, taoist.
+  -- Query the conditions table directly rather than assuming this list is
+     exhaustive or current -- it reflects the schema as of this doc's last edit.
 
 responses(response_id, template_id, condition_id, model, generation_idx,
           prompt_text, response_text, created_at)
@@ -45,8 +50,11 @@ stats_summary(axis, condition_id, model, metric, n, mean, baseline_mean, diff,
   -- precomputed, deterministic (pandas/scipy): each condition's mean on a metric
      vs. that SAME model's own baseline mean, with a Bonferroni-corrected 95% CI
      on the difference. bonferroni_sig=true means the CI excludes 0 after
-     correcting for 12 comparisons -- treat this as the bar for "statistically
-     supported," not just an eyeballed difference.
+     correcting for N_COMPARISONS (= count of distinct non-baseline condition_id
+     in the conditions table; check scripts/compute_stats.py if you need the
+     exact current value) -- treat this as the bar for "statistically
+     supported," not just an eyeballed difference. The CI is computed from a
+     template-paired t-test (df = n_templates-1), not a naive z-test on raw n.
 """
 
 _SELECT_ONLY = re.compile(r"^\s*(with\b|select\b)", re.IGNORECASE)
