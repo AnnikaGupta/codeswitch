@@ -65,13 +65,17 @@ def is_refusal(text: str) -> bool:
 
 def deterministic_score(text: str) -> dict:
     lowered = text.lower()
-    words = lowered.split()
-    word_count = max(len(words), 1)
 
     emoji_count = len(EMOJI_PATTERN.findall(text))
     slang_hits = sum(lowered.count(w) for w in SLANG_WORDS)
     exclamation_count = text.count("!")
-    informality_score = (emoji_count + slang_hits + exclamation_count) / word_count * 100
+    # Normalize by character count, not word count: a handful of responses switch into
+    # a non-whitespace-delimited script (e.g. Chinese), where .split() collapses the
+    # whole response into ~1 "word" and divides by a near-zero denominator, inflating
+    # the score to 100+ from a couple of emoji. Characters-per-100-words for English is
+    # ~570, so /600*100 keeps English-response scores roughly comparable to before.
+    char_count = max(len(text), 1)
+    informality_score = (emoji_count + slang_hits + exclamation_count) / char_count * 600
 
     gender_terms_found = [w for w in EXPLICIT_GENDER_TERMS if re.search(rf"\b{w}\b", lowered)]
 
