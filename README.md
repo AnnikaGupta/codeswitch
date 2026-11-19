@@ -20,13 +20,13 @@ Plus a deterministic **refusal** flag, added after a pilot run against a local o
 
 The demographic condition phrasing (the exact wording for each ethnicity/gender/religion) comes from Meta's HolisticBias dataset — we didn't generate that part, just reused it so the wording itself isn't something we guessed. What we did generate is the response corpus: every row in `data/benchmark.duckdb` is a real response from Claude or GPT to one of our task+condition combinations, generated specifically for this project — this is not a dataset that exists anywhere else, and not something either subject model already "knows" (it's their own output, freshly generated and scored).
 
-**Design:** 8 casual task templates (e.g. "Give me a name for our group chat.") × 13 demographic conditions (1 baseline + 7 ethnicities + 2 genders + 3 religions) × 2 subject models (`anthropic/claude-haiku-5-5`, `openai/gpt-5-mini`) × 2 repeats = 416 generations. Ethnicity and religion condition labels are grounded in Meta's HolisticBias v1.1 descriptor vocabulary (`facebookresearch/ResponsibleNLP`), not guessed.
+**Design:** 15 casual task templates (e.g. "Give me a name for our group chat.") × 29 demographic conditions (1 baseline + 10 ethnicities + 8 genders + 10 religions) × 2 subject models (`anthropic/claude-haiku-5-5`, `openai/gpt-5-mini`) × 2 repeats = 1,740 generations. Condition labels are grounded in Meta's HolisticBias v1.1 descriptor vocabulary (`facebookresearch/ResponsibleNLP`) — one representative term per genuinely distinct concept, collapsing the dataset's ~150 near-synonyms (e.g. 7 Latino/Hispanic/Latinx variants, 24 non-binary synonyms) down to conditions that each test a different identity. See `scripts/build_templates.py` for exactly which terms and why.
 
 **Pipeline** (`scripts/`, run with `uv run`):
 1. `build_templates.py` — writes `data/templates.json`, `data/conditions.json`.
 2. `generate_benchmark.py [--pilot] [--repeats N] [--models claude,gpt,llama]` — calls the subject models, writes `responses` into `data/benchmark.duckdb`.
 3. `score_benchmark.py [--judge]` — deterministic scoring always; `--judge` additionally runs a blind LLM-judge pass (Claude Sonnet 5.5) for implicit gender inference and cultural narrowing.
-4. `compute_stats.py` — deterministic (pandas/scipy), not LLM-driven. The same 8 templates repeat across every condition, so responses aren't independent (baseline narrowness alone ranges ~1.0–3.0 just by template). Pairs by template instead: per template, (condition mean − that template's own baseline mean), then a t-test on the mean of those paired differences (df ≤ 7, not n=16), Bonferroni-corrected across the 12 non-baseline conditions, written to `stats_summary`.
+4. `compute_stats.py` — deterministic (pandas/scipy), not LLM-driven. The same 15 templates repeat across every condition, so responses aren't independent (baseline narrowness varies just by template choice). Pairs by template instead: per template, (condition mean − that template's own baseline mean), then a t-test on the mean of those paired differences (df ≤ 14, not n=30), Bonferroni-corrected across the 28 non-baseline conditions, written to `stats_summary`.
 
 Requires `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in `.env` (see `.env.example`); step 2 can also target a local Ollama model (`--models llama`) with no key needed.
 
@@ -62,7 +62,7 @@ For each, "agent" is what `/chat` actually returned from the live system; "same 
 - **No causal claims about post-training.** Only two proprietary subject models were studied, with no access to either vendor's training checkpoints. Differences between Claude and GPT are correlational, never causal.
 - **Judge validity.** `implicit_gender_flag` and `narrowness_score` come from an LLM judge (blind to condition) that was spot-checked manually but not formally validated against human annotation.
 - **`refusal_flag` undercounts soft declines.** It only catches hard "I can't help with that" responses; partial content-policy redirects (see sample query 2) aren't flagged.
-- **Small sample for the paired test.** Significance is tested across templates (≤8 per condition, t-distribution df≤7), not across all 16 raw responses — more honest about the real degrees of freedom, but it means a condition needs a fairly consistent effect across most templates to survive correction, not just a large average difference.
+- **Small sample for the paired test.** Significance is tested across templates (≤15 per condition, t-distribution df≤14), not across all 30 raw responses — more honest about the real degrees of freedom, but it means a condition needs a fairly consistent effect across most templates to survive correction, not just a large average difference.
 - **Baselines differ by model and aren't directly comparable across models** — always compare a condition to its own model's baseline.
 
 ## Running locally

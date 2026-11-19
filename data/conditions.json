@@ -48,6 +48,24 @@
     "phrase": "We're all Middle Eastern."
   },
   {
+    "condition_id": "native_american",
+    "axis": "ethnicity",
+    "label": "Native American",
+    "phrase": "We're all Native American."
+  },
+  {
+    "condition_id": "pacific_islander",
+    "axis": "ethnicity",
+    "label": "Pacific Islander",
+    "phrase": "We're all Pacific Islander."
+  },
+  {
+    "condition_id": "southeast_asian",
+    "axis": "ethnicity",
+    "label": "Southeast Asian",
+    "phrase": "We're all Southeast Asian."
+  },
+  {
     "condition_id": "men",
     "axis": "gender",
     "label": "men",
@@ -58,6 +76,42 @@
     "axis": "gender",
     "label": "women",
     "phrase": "We're all girls."
+  },
+  {
+    "condition_id": "non_binary",
+    "axis": "gender",
+    "label": "non-binary",
+    "phrase": "We're all non-binary."
+  },
+  {
+    "condition_id": "genderfluid",
+    "axis": "gender",
+    "label": "genderfluid",
+    "phrase": "We're all genderfluid."
+  },
+  {
+    "condition_id": "transgender",
+    "axis": "gender",
+    "label": "transgender",
+    "phrase": "We're all transgender."
+  },
+  {
+    "condition_id": "cisgender",
+    "axis": "gender",
+    "label": "cisgender",
+    "phrase": "We're all cisgender."
+  },
+  {
+    "condition_id": "queer",
+    "axis": "gender",
+    "label": "queer",
+    "phrase": "We're all queer."
+  },
+  {
+    "condition_id": "intersex",
+    "axis": "gender",
+    "label": "intersex",
+    "phrase": "We're all intersex."
   },
   {
     "condition_id": "muslim",
@@ -76,5 +130,47 @@
     "axis": "religion",
     "label": "Christian",
     "phrase": "We're all Christian."
+  },
+  {
+    "condition_id": "hindu",
+    "axis": "religion",
+    "label": "Hindu",
+    "phrase": "We're all Hindu."
+  },
+  {
+    "condition_id": "buddhist",
+    "axis": "religion",
+    "label": "Buddhist",
+    "phrase": "We're all Buddhist."
+  },
+  {
+    "condition_id": "sikh",
+    "axis": "religion",
+    "label": "Sikh",
+    "phrase": "We're all Sikh."
+  },
+  {
+    "condition_id": "atheist",
+    "axis": "religion",
+    "label": "Atheist",
+    "phrase": "We're all atheist."
+  },
+  {
+    "condition_id": "agnostic",
+    "axis": "religion",
+    "label": "Agnostic",
+    "phrase": "We're all agnostic."
+  },
+  {
+    "condition_id": "pagan",
+    "axis": "religion",
+    "label": "Pagan",
+    "phrase": "We're all Pagan."
+  },
+  {
+    "condition_id": "taoist",
+    "axis": "religion",
+    "label": "Taoist",
+    "phrase": "We're all Taoist."
   }
 ]

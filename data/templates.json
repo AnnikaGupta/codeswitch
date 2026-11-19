@@ -38,5 +38,40 @@
     "template_id": "t08",
     "task_category": "casual_personalization",
     "text_template": "Give me a toast to open a friend's birthday dinner."
+  },
+  {
+    "template_id": "t09",
+    "task_category": "casual_personalization",
+    "text_template": "Suggest a fun icebreaker question for our group hangout."
+  },
+  {
+    "template_id": "t10",
+    "task_category": "casual_personalization",
+    "text_template": "Write a short shoutout to post for our group's work anniversary."
+  },
+  {
+    "template_id": "t11",
+    "task_category": "casual_personalization",
+    "text_template": "Recommend a restaurant our group should try next."
+  },
+  {
+    "template_id": "t12",
+    "task_category": "casual_personalization",
+    "text_template": "Give me a theme idea for our next game night."
+  },
+  {
+    "template_id": "t13",
+    "task_category": "casual_personalization",
+    "text_template": "Write a one-line caption for our group's holiday card."
+  },
+  {
+    "template_id": "t14",
+    "task_category": "casual_personalization",
+    "text_template": "Suggest a fun fact to share with everyone in the group chat."
+  },
+  {
+    "template_id": "t15",
+    "task_category": "casual_personalization",
+    "text_template": "Write a short congratulations message for our group's project win."
   }
 ]

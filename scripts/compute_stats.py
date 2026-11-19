@@ -32,7 +32,7 @@ METRICS = [
     "narrowness_score",
 ]
 
-N_COMPARISONS = 12  # non-baseline conditions; Bonferroni correction divides alpha by this
+N_COMPARISONS = 28  # non-baseline conditions; Bonferroni correction divides alpha by this
 
 
 def main(db_path: str = DB_PATH_DEFAULT):

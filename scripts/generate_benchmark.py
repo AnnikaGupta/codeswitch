@@ -108,6 +108,8 @@ def main():
     parser.add_argument("--db", type=str, default=DB_PATH_DEFAULT)
     parser.add_argument("--templates", type=str, default=None,
                          help="Comma-separated template_ids to (re)generate, e.g. t01. Default: all.")
+    parser.add_argument("--conditions", type=str, default=None,
+                         help="Comma-separated condition_ids to (re)generate, e.g. sikh,queer. Default: all.")
     args = parser.parse_args()
 
     templates, conditions = load_grid()
@@ -119,6 +121,9 @@ def main():
     if args.templates:
         wanted = {t.strip() for t in args.templates.split(",")}
         templates = [t for t in templates if t["template_id"] in wanted]
+    if args.conditions:
+        wanted_c = {c.strip() for c in args.conditions.split(",")}
+        conditions = [c for c in conditions if c["condition_id"] in wanted_c]
 
     model_keys = [m.strip() for m in args.models.split(",")]
     models = {k: SUBJECT_MODELS[k] for k in model_keys}
